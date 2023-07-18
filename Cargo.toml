@@ -1,13 +1,19 @@
 [package]
 authors = ["Emirhan TALA <emirhantala99ff99@gmail.com>"]
 name = "amongos"
-version = "0.1.0"
+version = "0.3.1"
 edition = "2021"
 
 
 [dependencies]
-bootloader = "0.9"
+bootloader = "0.9.23"
 x86_64 = "0.14"
+spin = "0.5.2"
+volatile = "0.2.6"
+
+[dependencies.lazy_static]
+version = "1.0"
+features = ["spin_no_std"]
 
 [package.metadata.bootimage]
 build-command = ["build"]
