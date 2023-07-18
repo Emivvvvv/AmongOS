@@ -1,10 +1,9 @@
-const VERSION: &str = "v0.3.1";
+const VERSION: &str = "v0.4.0";
 
 use core::fmt;
 use lazy_static::lazy_static;
 use spin::Mutex;
 use volatile::Volatile;
-
 
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
@@ -13,7 +12,6 @@ lazy_static! {
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
     });
 }
-
 
 #[allow(unused)]
 #[derive(Clone, Copy)]
@@ -29,7 +27,6 @@ pub enum Color {
     Gray = 0x7, DarkGray = 0x8,
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 struct ColorCode(u8);
@@ -40,7 +37,6 @@ impl ColorCode {
     }
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
 struct ScreenChar {
@@ -48,17 +44,14 @@ struct ScreenChar {
     color_code: ColorCode,
 }
 
-
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
-
 
 #[repr(transparent)]
 #[derive(Debug)]
 struct Buffer {
     chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
-
 
 pub struct Writer {
     column_position: usize,
@@ -88,7 +81,6 @@ impl Writer {
         }
     }
 
-
     fn write_string(&mut self, s: &str) {
         for byte in s.bytes() {
             match byte {
@@ -99,7 +91,6 @@ impl Writer {
             }
         }
     }
-
 
     fn new_line(&mut self) {
         self.delete_among_os();
@@ -113,7 +104,6 @@ impl Writer {
         self.column_position = 0;
         self.draw_among_os();
     }
-
 
     fn clear_row(&mut self, row: usize) {
         let blank = ScreenChar {
@@ -172,8 +162,6 @@ impl Writer {
             self.buffer.chars[row as usize][*col as usize].write(screen_char);
         }
     }
-
-
 }
 
 impl fmt::Write for Writer {
@@ -183,19 +171,16 @@ impl fmt::Write for Writer {
     }
 }
 
-
 #[macro_export]
 macro_rules! print {
     ($($arg:tt)*) => ($crate::screen::_print(format_args!($($arg)*)));
 }
-
 
 #[macro_export]
 macro_rules! println {
     () => ($crate::print!("\n"));
     ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
 }
-
 
 pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
@@ -206,6 +191,27 @@ pub fn welcome() {
     println!("AMONG OS {}", VERSION);
     println!("Created by Emirhan Tala");
     println!();
-    print!(">>> ");
     WRITER.lock().draw_among_os();
+}
+
+#[test_case]
+fn test_println_simple() {
+    println!("test_println_simple output");
+}
+
+#[test_case]
+fn test_println_many() {
+    for _ in 0..200 {
+        println!("test_println_many output");
+    }
+}
+
+#[test_case]
+fn test_println_output() {
+    let s = "Some test string that fits on a single line";
+    println!("{}", s);
+    for (i, c) in s.chars().enumerate() {
+        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
+        assert_eq!(char::from(screen_char.ascii_character), c);
+    }
 }
