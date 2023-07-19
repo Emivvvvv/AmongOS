@@ -17,6 +17,7 @@ lazy_static! {
             let stack_end = stack_start + STACK_SIZE;
             stack_end
         };
+
         tss
     };
 }
