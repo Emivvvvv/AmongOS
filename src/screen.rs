@@ -1,4 +1,4 @@
-const VERSION: &str = "v0.5.0";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 use core::fmt;
 use lazy_static::lazy_static;

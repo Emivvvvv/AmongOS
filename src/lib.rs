@@ -11,6 +11,7 @@ use x86_64::instructions::hlt;
 pub mod serial;
 pub mod screen;
 pub mod interrupts;
+pub mod gdt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
@@ -60,6 +61,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
 
 pub fn init() {
     screen::welcome();
+    gdt::init();
     interrupts::init_idt();
 }
 

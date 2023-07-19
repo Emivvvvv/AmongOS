@@ -26,6 +26,8 @@ pub extern "C" fn eh_personality() {}
 pub extern "C" fn _start() -> ! {
     amongos::init();
 
+    
+
     #[cfg(test)]
     test_main();
 
