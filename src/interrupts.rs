@@ -9,6 +9,8 @@ use crate::interrupts::InterruptIndex::Keyboard;
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
 
+static mut TIMER_COUNTER: u8 = 1;
+
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum InterruptIndex {
@@ -49,7 +51,12 @@ lazy_static! {
 extern "x86-interrupt" fn timer_interrupt_handler(
     _stack_frame: InterruptStackFrame)
 {
-    // crate::screen::tick();
+    unsafe {
+        if TIMER_COUNTER % 5 == 0 { crate::screen::tick_r() }
+        else if TIMER_COUNTER % 9 == 0 { crate::screen::tick_w() }
+        TIMER_COUNTER += 1;
+        if TIMER_COUNTER % 10 == 0 { TIMER_COUNTER = 1 }
+    }
 
     unsafe {
         PICS.lock()

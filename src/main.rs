@@ -5,6 +5,8 @@
 #![feature(custom_test_frameworks)]
 #![test_runner(amongos::test_runner)]
 #![reexport_test_harness_main = "test_main"]
+#![allow(dead_code)]
+#![allow(unused_imports)]
 
 use core::panic::PanicInfo;
 use amongos::{println};

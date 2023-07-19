@@ -142,21 +142,23 @@ impl Writer {
         }
     }
 
-    // fn time_tick(&mut self) {
-    //     let mut screen_char_1 = self.buffer.chars[0][BUFFER_WIDTH - 2].read();
-    //     let mut screen_char_2 = self.buffer.chars[0][BUFFER_WIDTH - 1].read();
-    //     screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::Red);
-    //     screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::Red);
-    //     self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
-    //     self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
-    //
-    //     //a delay function is needed
-    //
-    //     screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::White);
-    //     screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::White);
-    //     self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
-    //     self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
-    // }
+    fn time_tick_red(&mut self) {
+        let mut screen_char_1 = self.buffer.chars[0][BUFFER_WIDTH - 2].read();
+        let mut screen_char_2 = self.buffer.chars[0][BUFFER_WIDTH - 1].read();
+        screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::Red);
+        screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::Red);
+        self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
+        self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
+    }
+
+    fn time_tick_white(&mut self){
+        let mut screen_char_1 = self.buffer.chars[0][BUFFER_WIDTH - 2].read();
+        let mut screen_char_2 = self.buffer.chars[0][BUFFER_WIDTH - 1].read();
+        screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::White);
+        screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::White);
+        self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
+        self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
+    }
 
     fn draw_among_os(&mut self) {
         //  [x, x, x, x, x, x, y, c]
@@ -214,9 +216,13 @@ pub fn welcome() {
     WRITER.lock().draw_among_os();
 }
 
-// pub fn tick() {
-//     WRITER.lock().time_tick();
-// }
+pub fn tick_r() {
+    WRITER.lock().time_tick_red();
+}
+
+pub fn tick_w() {
+    WRITER.lock().time_tick_white();
+}
 
 #[test_case]
 fn test_println_simple() {
