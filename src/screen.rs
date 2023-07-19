@@ -4,6 +4,7 @@ use core::fmt;
 use lazy_static::lazy_static;
 use spin::Mutex;
 use volatile::Volatile;
+use x86_64::instructions::interrupts;
 
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
@@ -115,6 +116,22 @@ impl Writer {
         }
     }
 
+    // fn time_tick(&mut self) {
+    //     let mut screen_char_1 = self.buffer.chars[0][BUFFER_WIDTH - 2].read();
+    //     let mut screen_char_2 = self.buffer.chars[0][BUFFER_WIDTH - 1].read();
+    //     screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::Red);
+    //     screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::Red);
+    //     self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
+    //     self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
+    //
+    //     //a delay function is needed
+    //
+    //     screen_char_1.color_code = ColorCode::new(Color::Yellow, Color::White);
+    //     screen_char_2.color_code = ColorCode::new(Color::Yellow, Color::White);
+    //     self.buffer.chars[0][BUFFER_WIDTH - 2].write(screen_char_1);
+    //     self.buffer.chars[0][BUFFER_WIDTH - 1].write(screen_char_2);
+    // }
+
     fn draw_among_os(&mut self) {
         //  [x, x, x, x, x, x, y, c]
         //  x => x(column) coordinate slots. 0s will be excluded.
@@ -184,7 +201,11 @@ macro_rules! println {
 
 pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
-    WRITER.lock().write_fmt(args).unwrap();
+    use x86_64::instructions::interrupts;
+
+    interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+    })
 }
 
 pub fn welcome() {
@@ -193,6 +214,10 @@ pub fn welcome() {
     println!();
     WRITER.lock().draw_among_os();
 }
+
+// pub fn tick() {
+//     WRITER.lock().time_tick();
+// }
 
 #[test_case]
 fn test_println_simple() {
@@ -208,10 +233,16 @@ fn test_println_many() {
 
 #[test_case]
 fn test_println_output() {
+    use core::fmt::Write;
+    use x86_64::instructions::interrupts;
+
     let s = "Some test string that fits on a single line";
-    println!("{}", s);
-    for (i, c) in s.chars().enumerate() {
-        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
-        assert_eq!(char::from(screen_char.ascii_character), c);
-    }
+    interrupts::without_interrupts(|| {
+        let mut writer = WRITER.lock();
+        writeln!(writer, "\n{}", s).expect("writeln failed");
+        for (i, c) in s.chars().enumerate() {
+            let screen_char = writer.buffer.chars[BUFFER_HEIGHT - 2][i].read();
+            assert_eq!(char::from(screen_char.ascii_character), c);
+        }
+    });
 }

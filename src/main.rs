@@ -7,7 +7,6 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-use x86_64::instructions::{hlt};
 use amongos::{println};
 
 #[panic_handler]
@@ -15,7 +14,7 @@ use amongos::{println};
 #[cfg(not(test))]
 pub fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop { hlt() }
+    amongos::hlt_loop()
 }
 
 #[lang = "eh_personality"]
@@ -26,12 +25,10 @@ pub extern "C" fn eh_personality() {}
 pub extern "C" fn _start() -> ! {
     amongos::init();
 
-    
-
     #[cfg(test)]
     test_main();
 
-    loop { hlt(); }
+    amongos::hlt_loop()
 }
 
 #[cfg(test)]
