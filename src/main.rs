@@ -9,7 +9,6 @@
 use core::panic::PanicInfo;
 use x86_64::instructions::{hlt};
 use amongos::{println};
-use amongos::screen::welcome;
 
 #[panic_handler]
 #[no_mangle]
@@ -25,7 +24,7 @@ pub extern "C" fn eh_personality() {}
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    welcome();
+    amongos::init();
 
     #[cfg(test)]
     test_main();
