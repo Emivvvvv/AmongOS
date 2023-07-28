@@ -9,7 +9,10 @@
 #![allow(unused_imports)]
 
 use core::panic::PanicInfo;
-use amongos::{println};
+use amongos::{print, println};
+use bootloader::{BootInfo, entry_point};
+use x86_64::structures::paging::PageTable;
+use x86_64::VirtAddr;
 
 #[panic_handler]
 #[no_mangle]
@@ -23,13 +26,19 @@ pub fn panic(info: &PanicInfo) -> ! {
 #[no_mangle]
 pub extern "C" fn eh_personality() {}
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-    amongos::init();
+entry_point!(kernel_main);
 
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    amongos::init();
+    //
+
+
+
+    //
     #[cfg(test)]
     test_main();
 
+    println!("It did not crash!");
     amongos::hlt_loop()
 }
 
