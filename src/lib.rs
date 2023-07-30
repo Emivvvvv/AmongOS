@@ -9,11 +9,14 @@
 use core::panic::PanicInfo;
 use x86_64::instructions::hlt;
 
+extern crate alloc;
+
 pub mod serial;
 pub mod screen;
 pub mod interrupts;
 pub mod gdt;
 pub mod memory;
+pub mod allocator;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]

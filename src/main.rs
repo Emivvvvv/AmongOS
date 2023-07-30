@@ -8,11 +8,14 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
+use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 use core::panic::PanicInfo;
 use amongos::{print, println};
 use bootloader::{BootInfo, entry_point};
 use x86_64::structures::paging::PageTable;
 use x86_64::VirtAddr;
+
+extern crate alloc;
 
 #[panic_handler]
 #[no_mangle]

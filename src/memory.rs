@@ -1,4 +1,3 @@
-use pc_keyboard::KeyCode::{B, C, M};
 use x86_64::{
     structures::paging::PageTable,
     VirtAddr,
