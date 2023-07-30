@@ -61,6 +61,16 @@ fn many_boxes() {
     }
 }
 
+#[test_case]
+fn many_boxes_long_lived() {
+    let long_lived = Box::new(1);
+    for i in 0..HEAP_SIZE {
+        let x = Box::new(i);
+        assert_eq!(*x, i);
+    }
+    assert_eq!(*long_lived, 1);
+}
+
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     amongos::test_panic_handler(info)

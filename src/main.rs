@@ -31,7 +31,7 @@ pub extern "C" fn eh_personality() {}
 
 entry_point!(kernel_main);
 
-fn kernel_main(boot_info: &'static BootInfo) -> ! {
+fn kernel_main(_boot_info: &'static BootInfo) -> ! {
     amongos::init();
     //
 
