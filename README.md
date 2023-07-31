@@ -5,7 +5,7 @@ A small sussy operating system written with the Rust programming language. Devel
 
 ## Screenshots
 
-![My Image](amongOS.png)
+![My Image](AmongOS.png)
 
 
 ## Roadmap
