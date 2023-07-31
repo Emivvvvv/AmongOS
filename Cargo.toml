@@ -1,9 +1,12 @@
 [package]
 authors = ["Emirhan TALA <emirhantala99ff99@gmail.com>"]
+description = "A small sussy operating system written with the Rust programming language. Developed by following Philipp Oppermann's Writing an OS in Rust blog."
 name = "amongos"
 version = "0.11.0"
 edition = "2021"
-
+license = "Apache-2"
+readme = "README.md"
+repository = "https://github.com/Emivvvvv/AmongOS"
 
 [dependencies]
 bootloader = { version = "0.9.23", features = ["map_physical_memory"]}
