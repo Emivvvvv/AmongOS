@@ -26,6 +26,9 @@ A small sussy operating system written with the Rust programming language. Devel
 You can't just download and run the operating system, unfortunately.
 
 To proceed, it is necessary to install QEMU and Rust Nightly. You might also need to follow some extra steps, so I suggest referring to the first two tutorials on [Writing an OS in Rust Philipp Oppermann's blog](https://os.phil-opp.com/)
+
+[AmongOS's crates.io page](https://crates.io/crates/amongos)
+
 ## Acknowledgements
 
 - [Writing an OS in Rust Philipp Oppermann's blog](https://os.phil-opp.com/)
