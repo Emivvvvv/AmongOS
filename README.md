@@ -31,12 +31,19 @@ To proceed, it is necessary to install QEMU and Rust Nightly. You might also nee
 
 ## Usage 
 
+To build:
+
+```shell
+cargo build --target among.json
 ```
-$ cargo +nightly run
+
+To run on Qemu
+
+```shell
+qemu-system-x86_64 -drive format=raw,file=target/among/debug/bootimage-amongos.bin
 ```
 
 ## Acknowledgements
 
 - [Writing an OS in Rust Philipp Oppermann's blog](https://os.phil-opp.com/)
 - [blog_os repo](https://github.com/phil-opp/blog_os)
-
